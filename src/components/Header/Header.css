@@ -1,0 +1,20 @@
+.bg-blue{
+    background: #233a95;
+  }
+  .headerWrapper .top-strip{
+    padding: 8px 0px;
+  }
+  .headerWrapper .top-strip p{
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+.headerWrapper .header{
+    width: 100%;
+    height: auto;
+    padding: 15px 0px;
+}
+.logoWrapper img{
+    width: 100%;
+}
