@@ -61,7 +61,6 @@ export default function Navbar() {
   const pathName = usePathname();
   const router = useRouter();
 
-  console.log(currentUpdatedProduct, "navbar");
 
   useEffect(() => {
     if (
