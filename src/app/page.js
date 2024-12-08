@@ -8,10 +8,11 @@ import PageLevelLoader from "@/components/Loader/pageLevelLoader.js/page";
 
 export default function Home() {
   const { isAuthUser } = useContext(GlobalContext);
+
   const [products, setProducts] = useState([]);
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [componentLevelLoader, setComponentLevelLoader] = useState(false);
+  const [loading, setLoading] = useState(true); 
+
 
   async function getListOfProducts() {
     try {
@@ -24,24 +25,19 @@ export default function Home() {
     }
   }
 
-  async function handleNavigate(path) {
-    setComponentLevelLoader(true);
-    setTimeout(() => {
-      router.push(path);
-    }, 300);
-  }
-
   useEffect(() => {
     getListOfProducts();
   }, []);
 
+
   if (loading) {
-    return <PageLevelLoader />;
+    return (
+      <PageLevelLoader />
+    );
   }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {componentLevelLoader && <PageLevelLoader />}
       <section className="">
         <div className="grid max-w-screen-xl px-4 py-8 mx-suto  lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
           <div className="mr-auto place-self-center lg:col-span-7">
@@ -55,7 +51,7 @@ export default function Home() {
 
             <button
               type="button"
-              onClick={() => handleNavigate("/product/listing/all-products")}
+              onClick={() => router.push("/product/listing/all-products")}
               className="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
             >
               Explore Shop Collection
@@ -78,9 +74,7 @@ export default function Home() {
                   </h2>
                 </div>
                 <button
-                  onClick={() =>
-                    handleNavigate("/product/listing/all-products")
-                  }
+                  onClick={() => router.push("/product/listing/all-products")}
                   className="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
                 >
                   Shop ALL
@@ -96,7 +90,7 @@ export default function Home() {
                       .map((productItem) => (
                         <li
                           onClick={() =>
-                            handleNavigate(`/product/${productItem._id}`)
+                            router.push(`/product/${productItem._id}`)
                           }
                           className="cursor-pointer"
                           key={productItem._id}
@@ -140,7 +134,7 @@ export default function Home() {
                 <div className="absolute inset-0 flex flex-col items-start justify-end p-6">
                   <h3 className="text-xl font-medium text-white">KIDS</h3>
                   <button
-                    onClick={() => handleNavigate("/product/listing/kids")}
+                    onClick={() => router.push("/product/listing/kids")}
                     className="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
                   >
                     Shop Now
@@ -157,7 +151,7 @@ export default function Home() {
                 <div className="absolute inset-0 flex flex-col items-start justify-end p-6">
                   <h3 className="text-xl font-medium text-white">WOMEN</h3>
                   <button
-                    onClick={() => handleNavigate("/product/listing/women")}
+                    onClick={() => router.push("/product/listing/women")}
                     className="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
                   >
                     Shop Now
@@ -174,7 +168,7 @@ export default function Home() {
                 <div className="absolute inset-0 flex flex-col items-start justify-end p-6">
                   <h3 className="text-xl font-medium text-white">MEN</h3>
                   <button
-                    onClick={() => handleNavigate("/product/listing/men")}
+                    onClick={() => router.push("/product/listing/men")}
                     className="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
                   >
                     Shop Now

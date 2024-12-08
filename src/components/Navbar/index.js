@@ -2,19 +2,13 @@
 
 import { GlobalContext } from "@/context";
 import { adminNavOptions, navOptions } from "@/utils";
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect } from "react";
 import CommonModal from "../CommonModal";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
-import CartModal from "../CartModal";
-import PageLevelLoader from "@/components/Loader/pageLevelLoader.js/page";
+import CartModal from "../CartModal"; 
 
-function NavItems({
-  isModalView = false,
-  isAdminView,
-  router,
-  handleNavigate,
-}) {
+function NavItems({ isModalView = false, isAdminView, router }) {
   return (
     <div
       className={`items-center justify-between w-full md:flex md:w-auto ${
@@ -23,7 +17,7 @@ function NavItems({
       id="nav-items"
     >
       <ul
-        className={`flex flex-col p-4 md:p-0 mt-4 font-medium rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 bg-white ${
+        className={`flex flex-col p-4 md:p-0 mt-4 font-medium  rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 bg-white ${
           isModalView ? "border-none" : "border border-gray-100"
         }`}
       >
@@ -32,7 +26,7 @@ function NavItems({
               <li
                 className="cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0"
                 key={item.id}
-                onClick={() => handleNavigate(item.path)}
+                onClick={() => router.push(item.path)}
               >
                 {item.label}
               </li>
@@ -41,7 +35,7 @@ function NavItems({
               <li
                 className="cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0"
                 key={item.id}
-                onClick={() => handleNavigate(item.path)}
+                onClick={() => router.push(item.path)}
               >
                 {item.label}
               </li>
@@ -61,13 +55,12 @@ export default function Navbar() {
     currentUpdatedProduct,
     setCurrentUpdatedProduct,
     showCartModal,
-    setShowCartModal,
+    setShowCartModal
   } = useContext(GlobalContext);
-
-  const [componentLevelLoader, setComponentLevelLoader] = useState(false);
 
   const pathName = usePathname();
   const router = useRouter();
+
 
   useEffect(() => {
     if (
@@ -77,34 +70,18 @@ export default function Navbar() {
       setCurrentUpdatedProduct(null);
   }, [pathName]);
 
-  function handleNavigate(path) {
-    setComponentLevelLoader(true);
-    Promise.all([
-      router.push(path),
-      new Promise((resolve) => setTimeout(resolve, 300)),
-    ]).then(() => {
-      setComponentLevelLoader(false);
-    });
-  }
-
   function handleLogout() {
-    setComponentLevelLoader(true);
-    setTimeout(() => {
-      setIsAuthUser(false);
-      setUser(null);
-      Cookies.remove("token");
-      localStorage.clear();
-      router.push("/");
-      setComponentLevelLoader(false);
-    }, 300);
+    setIsAuthUser(false);
+    setUser(null);
+    Cookies.remove("token");
+    localStorage.clear();
+    router.push("/");
   }
 
   const isAdminView = pathName.includes("admin-view");
 
   return (
     <>
-      {componentLevelLoader && <PageLevelLoader />}
-
       <nav className="bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <div
@@ -119,8 +96,10 @@ export default function Navbar() {
             {!isAdminView && isAuthUser ? (
               <Fragment>
                 <button
-                  className="mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tracking-wide text-white"
-                  onClick={() => handleNavigate("/account")}
+                  className={
+                    "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tracking-wide text-white"
+                  }
+                  onClick={()=>router.push('/account')}
                 >
                   Account
                 </button>
@@ -128,7 +107,7 @@ export default function Navbar() {
                   className={
                     "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tracking-wide text-white"
                   }
-                  onClick={() => setShowCartModal(true)}
+                  onClick={()=> setShowCartModal(true)}
                 >
                   Cart
                 </button>
@@ -140,13 +119,13 @@ export default function Navbar() {
                   className={
                     "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tracking-wide text-white"
                   }
-                  onClick={() => handleNavigate("/")}
+                  onClick={() => router.push("/")}
                 >
                   Client View
                 </button>
               ) : (
                 <button
-                  onClick={() => handleNavigate("/admin-view")}
+                  onClick={() => router.push("/admin-view")}
                   className={
                     "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tracking-wide text-white"
                   }
@@ -166,7 +145,7 @@ export default function Navbar() {
               </button>
             ) : (
               <button
-                onClick={() => handleNavigate("/login")}
+                onClick={() => router.push("/login")}
                 className={
                   "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upprcase tracking-wide text-white"
                 }
@@ -198,11 +177,7 @@ export default function Navbar() {
               </svg>
             </button>
           </div>
-          <NavItems
-            router={router}
-            isAdminView={isAdminView}
-            handleNavigate={handleNavigate}
-          />
+          <NavItems router={router} isAdminView={isAdminView} />
         </div>
       </nav>
       <CommonModal
@@ -212,7 +187,6 @@ export default function Navbar() {
             router={router}
             isModalView={true}
             isAdminView={isAdminView}
-            handleNavigate={handleNavigate}
           />
         }
         show={showNavModal}
@@ -222,3 +196,5 @@ export default function Navbar() {
     </>
   );
 }
+
+
