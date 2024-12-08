@@ -2,6 +2,7 @@
 
 import InputComponent from "@/components/FormElements/InputComponent";
 import ComponentLevelLoader from "@/components/Loader/componentlevel";
+import PageLevelLoader from "@/components/Loader/pageLevelLoader.js/page";
 import Notification from "@/components/Notification";
 import { GlobalContext } from "@/context";
 import {
@@ -15,6 +16,8 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { PulseLoader } from "react-spinners";
 import { toast } from "react-toastify";
+
+
 
 export default function Account() {
   const {
@@ -32,6 +35,7 @@ export default function Account() {
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [currentEditedAddressId, setCurrentEditedAddressId] = useState(null);
   const router = useRouter()
+  const [loading, setLoading] = useState(true);
 
   async function extractAllAddresses() {
     setPageLevelLoader(true);
@@ -119,8 +123,17 @@ export default function Account() {
   }
 
   useEffect(() => {
-    if (user !== null) extractAllAddresses();
+    if (user !== null) {
+      extractAllAddresses();
+    } else {
+      setLoading(false);
+    }
   }, [user]);
+
+  if (loading) {
+    return <PageLevelLoader />;
+  }
+
 
   return (
     <section>

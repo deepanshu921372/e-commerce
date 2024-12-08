@@ -39,6 +39,7 @@ const initialFormData = {
 
 export default function AdminAddNewProduct() {
   const [formData, setFormData] = useState(initialFormData);
+  const [loading, setLoading] = useState(true);
 
   const {
     componentLevelLoader,
@@ -100,6 +101,7 @@ export default function AdminAddNewProduct() {
   }
 
   async function handleAddProduct() {
+    setLoading(true);
     setComponentLevelLoader({ loading: true, id: "" });
     const res =
       currentUpdatedProduct !== null

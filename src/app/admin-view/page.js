@@ -158,7 +158,11 @@ export default function AdminView() {
                     </li>
                   ))}
                 </ul>
-              ) : null}
+              ) : (
+                <div className="text-center mt-5">
+                  <p className="text-3xl font-medium">No orders found!</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

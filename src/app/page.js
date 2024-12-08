@@ -4,18 +4,24 @@ import { GlobalContext } from "@/context";
 import { getAllAdminProducts } from "@/services/product";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
+import PageLevelLoader from "@/components/Loader/pageLevelLoader.js/page";
 
 export default function Home() {
   const { isAuthUser } = useContext(GlobalContext);
 
   const [products, setProducts] = useState([]);
   const router = useRouter();
+  const [loading, setLoading] = useState(true); 
+
 
   async function getListOfProducts() {
-    const res = await getAllAdminProducts();
-
-    if (res.success) {
-      setProducts(res.data);
+    try {
+      const res = await getAllAdminProducts();
+      if (res.success) {
+        setProducts(res.data);
+      }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -23,7 +29,12 @@ export default function Home() {
     getListOfProducts();
   }, []);
 
-  console.log(products);
+
+  if (loading) {
+    return (
+      <PageLevelLoader />
+    );
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
